@@ -286,6 +286,8 @@ class ScreenRecoveryUI : public RecoveryUI, public DrawInterface {
   ScreenRecoveryUI();
   ~ScreenRecoveryUI() override;
 
+  bool is_text_selected;
+
   bool Init(const std::string& locale) override;
   std::string GetLocale() const override;
 

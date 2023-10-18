@@ -377,7 +377,8 @@ constexpr int kDefaultMarginWidth = 0;
 constexpr int kDefaultAnimationFps = 30;
 
 ScreenRecoveryUI::ScreenRecoveryUI()
-    : margin_width_(
+    : is_text_selected(false),
+      margin_width_(
           android::base::GetIntProperty("ro.recovery.ui.margin_width", kDefaultMarginWidth)),
       margin_height_(
           android::base::GetIntProperty("ro.recovery.ui.margin_height", kDefaultMarginHeight)),
@@ -407,6 +408,8 @@ ScreenRecoveryUI::ScreenRecoveryUI()
       locale_(""),
       rtl_locale_(false),
       is_graphics_available(false) {}
+
+bool is_text_selected;
 
 ScreenRecoveryUI::~ScreenRecoveryUI() {
   progress_thread_stopped_ = true;
@@ -507,7 +510,14 @@ void ScreenRecoveryUI::draw_background_locked() {
     const auto& text_surface = GetCurrentText();
     int text_x = (ScreenWidth() - gr_get_width(text_surface)) / 2;
     int text_y = GetTextBaseline();
-    gr_color(255, 255, 255, 255);
+
+    // Check if the current item is seletced and change the font color accordingly
+    if (is_text_selected) {
+      gr_color(0, 0, 0, 255); // Set font color to black
+    } else {
+      gr_color(255,255,255,255); // Set font color to white
+    }
+
     DrawTextIcon(text_x, text_y, text_surface);
   }
 }
